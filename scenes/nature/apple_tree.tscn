@@ -1,0 +1,7 @@
+[gd_scene load_steps=3 format=3 uid="uid://c3a6xhesor00e"]
+
+[ext_resource type="PackedScene" uid="uid://bbyconr4ni1oh" path="res://scenes/nature/tree.tscn" id="1_rksyn"]
+[ext_resource type="PackedScene" uid="uid://bsfesk0clkgrx" path="res://scenes/items/apple.tscn" id="2_c5g7a"]
+
+[node name="AppleTree" instance=ExtResource("1_rksyn")]
+Fruit = ExtResource("2_c5g7a")

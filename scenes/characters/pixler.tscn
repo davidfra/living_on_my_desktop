@@ -1,0 +1,200 @@
+[gd_scene load_steps=25 format=3 uid="uid://dwooc37qpx73l"]
+
+[ext_resource type="Script" path="res://scripts/characters/pixler.gd" id="1_526qt"]
+[ext_resource type="Texture2D" uid="uid://bra0pb01fy35r" path="res://assets/characters/pixler.png" id="1_qcxip"]
+[ext_resource type="Script" path="res://addons/behaviour_toolkit/finite_state_machine/fsm.gd" id="3_hrv1h"]
+[ext_resource type="Script" path="res://scripts/characters/state_machine/idle_state.gd" id="4_ku40d"]
+[ext_resource type="Texture2D" uid="uid://ewsvnocf5i4m" path="res://assets/characters/bubble_greet.png" id="4_tlfjk"]
+[ext_resource type="Script" path="res://scripts/characters/state_machine/random_transition.gd" id="5_d0xmk"]
+[ext_resource type="Script" path="res://scripts/characters/state_machine/wander_state.gd" id="5_n60tn"]
+[ext_resource type="Script" path="res://addons/behaviour_toolkit/finite_state_machine/fsm_transition.gd" id="7_8pnmx"]
+[ext_resource type="Script" path="res://scripts/characters/state_machine/turn_state.gd" id="7_y8w3n"]
+[ext_resource type="Script" path="res://scripts/characters/state_machine/always_transition.gd" id="8_yfsek"]
+[ext_resource type="Texture2D" uid="uid://bu0q0y6yind42" path="res://assets/characters/bubble_hungry.png" id="9_02vv1"]
+[ext_resource type="Script" path="res://scripts/characters/state_machine/proximity_transition.gd" id="10_46dvs"]
+[ext_resource type="Script" path="res://scripts/characters/state_machine/blackboard_value_transition.gd" id="11_545jl"]
+[ext_resource type="Script" path="res://scripts/characters/state_machine/walk_to_target_state.gd" id="12_5kct4"]
+[ext_resource type="Script" path="res://scripts/characters/state_machine/target_reached_transition.gd" id="13_0sqn2"]
+[ext_resource type="Script" path="res://scripts/characters/state_machine/eat_state.gd" id="14_k2box"]
+[ext_resource type="Script" path="res://scripts/characters/state_machine/search_state.gd" id="15_k8yps"]
+[ext_resource type="Script" path="res://scripts/characters/state_machine/call_actor_method_state.gd" id="17_njo02"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_30h7h"]
+atlas = ExtResource("1_qcxip")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5slay"]
+atlas = ExtResource("1_qcxip")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dfd66"]
+atlas = ExtResource("1_qcxip")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h38gy"]
+atlas = ExtResource("1_qcxip")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_njqsn"]
+atlas = ExtResource("1_qcxip")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_df4od"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_30h7h")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5slay")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dfd66")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h38gy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_njqsn")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 8.0
+}]
+
+[node name="Pixler" type="Node2D" groups=["pixler"]]
+z_index = 10
+script = ExtResource("1_526qt")
+
+[node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
+unique_name_in_owner = true
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_df4od")
+animation = &"walk"
+autoplay = "idle"
+offset = Vector2(0, -11)
+
+[node name="BubbleHungry" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(1, -34)
+texture = ExtResource("9_02vv1")
+
+[node name="BubbleGreet" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(-1, -34)
+texture = ExtResource("4_tlfjk")
+
+[node name="DebugLabel" type="Label" parent="."]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -43.0
+offset_top = -63.0
+offset_right = 43.0
+offset_bottom = -48.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0.486275, 0.486275, 0.486275, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 10
+text = "Pix: debugging hard"
+horizontal_alignment = 1
+
+[node name="FiniteStateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state", "actor")]
+unique_name_in_owner = true
+script = ExtResource("3_hrv1h")
+initial_state = NodePath("IdleState")
+actor = NodePath("..")
+
+[node name="IdleState" type="Node" parent="FiniteStateMachine"]
+script = ExtResource("4_ku40d")
+
+[node name="onRandom" type="Node" parent="FiniteStateMachine/IdleState" node_paths=PackedStringArray("next_state")]
+script = ExtResource("5_d0xmk")
+next_state = NodePath("../../WanderState")
+
+[node name="onHungry" type="Node" parent="FiniteStateMachine/IdleState" node_paths=PackedStringArray("next_state")]
+script = ExtResource("7_8pnmx")
+next_state = NodePath("../../SearchFoodState")
+use_event = true
+event = "hungry"
+
+[node name="onMeetOtherPixler" type="Node" parent="FiniteStateMachine/IdleState" node_paths=PackedStringArray("next_state")]
+script = ExtResource("10_46dvs")
+next_state = NodePath("../../GreetState")
+
+[node name="WanderState" type="Node" parent="FiniteStateMachine"]
+script = ExtResource("5_n60tn")
+
+[node name="onRandomStop" type="Node" parent="FiniteStateMachine/WanderState" node_paths=PackedStringArray("next_state")]
+script = ExtResource("5_d0xmk")
+random_factor = 500
+next_state = NodePath("../../IdleState")
+
+[node name="onRandomTurn" type="Node" parent="FiniteStateMachine/WanderState" node_paths=PackedStringArray("next_state")]
+script = ExtResource("5_d0xmk")
+random_factor = 500
+next_state = NodePath("../../TurnState")
+
+[node name="onHungry" type="Node" parent="FiniteStateMachine/WanderState" node_paths=PackedStringArray("next_state")]
+script = ExtResource("7_8pnmx")
+next_state = NodePath("../../SearchFoodState")
+use_event = true
+event = "hungry"
+
+[node name="onMeetOtherPixler" type="Node" parent="FiniteStateMachine/WanderState" node_paths=PackedStringArray("next_state")]
+script = ExtResource("10_46dvs")
+next_state = NodePath("../../GreetState")
+
+[node name="TurnState" type="Node" parent="FiniteStateMachine"]
+script = ExtResource("7_y8w3n")
+
+[node name="always" type="Node" parent="FiniteStateMachine/TurnState" node_paths=PackedStringArray("next_state")]
+script = ExtResource("8_yfsek")
+next_state = NodePath("../../WanderState")
+
+[node name="SearchFoodState" type="Node" parent="FiniteStateMachine"]
+script = ExtResource("15_k8yps")
+
+[node name="onFoodFound" type="Node" parent="FiniteStateMachine/SearchFoodState" node_paths=PackedStringArray("next_state")]
+script = ExtResource("11_545jl")
+value_name = "walk_to_target"
+next_state = NodePath("../../WalkToTargetState")
+
+[node name="WalkToTargetState" type="Node" parent="FiniteStateMachine"]
+script = ExtResource("12_5kct4")
+
+[node name="onFoodTargetReached" type="Node" parent="FiniteStateMachine/WalkToTargetState" node_paths=PackedStringArray("next_state")]
+script = ExtResource("13_0sqn2")
+next_state = NodePath("../../EatState")
+
+[node name="onTargetLost" type="Node" parent="FiniteStateMachine/WalkToTargetState" node_paths=PackedStringArray("next_state")]
+script = ExtResource("11_545jl")
+value_name = "walk_to_target"
+transition_if_missing = true
+next_state = NodePath("../../IdleState")
+
+[node name="EatState" type="Node" parent="FiniteStateMachine"]
+script = ExtResource("14_k2box")
+
+[node name="onFoodConsumed" type="Node" parent="FiniteStateMachine/EatState" node_paths=PackedStringArray("next_state")]
+script = ExtResource("11_545jl")
+value_name = "target_reached"
+transition_if_missing = true
+next_state = NodePath("../../IdleState")
+
+[node name="GreetState" type="Node" parent="FiniteStateMachine"]
+script = ExtResource("17_njo02")
+method = "greet"
+description = "greets someone"
+
+[node name="always" type="Node" parent="FiniteStateMachine/GreetState" node_paths=PackedStringArray("next_state")]
+script = ExtResource("8_yfsek")
+next_state = NodePath("../../WanderState")

@@ -1,0 +1,68 @@
+[gd_scene load_steps=8 format=3 uid="uid://vhlpyoa3t3my"]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_wxwc5"]
+[ext_resource type="PackedScene" uid="uid://dwooc37qpx73l" path="res://scenes/characters/pixler.tscn" id="2_0t3ip"]
+[ext_resource type="PackedScene" uid="uid://utd3r1k2iml8" path="res://scenes/structures/house.tscn" id="2_nriij"]
+[ext_resource type="Texture2D" uid="uid://cnf0suce0js82" path="res://assets/structures/fence.png" id="4_d6q74"]
+[ext_resource type="PackedScene" uid="uid://c3a6xhesor00e" path="res://scenes/nature/apple_tree.tscn" id="6_bcwlr"]
+[ext_resource type="Script" path="res://scripts/items/spawner.gd" id="7_6sj82"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_x4kpd"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_wxwc5")
+metadata/_edit_horizontal_guides_ = [522.0]
+metadata/_edit_vertical_guides_ = [326.0]
+
+[node name="GroundLine" type="Line2D" parent="."]
+unique_name_in_owner = true
+points = PackedVector2Array(0, 80, 960, 80)
+width = 2.0
+default_color = Color(0.501961, 0.501961, 0.501961, 1)
+
+[node name="Structures" type="Node" parent="."]
+
+[node name="House" parent="Structures" instance=ExtResource("2_nriij")]
+position = Vector2(98, 79)
+
+[node name="Living" type="Node" parent="."]
+
+[node name="Pixler" parent="Living" instance=ExtResource("2_0t3ip")]
+position = Vector2(50, 80)
+direction = -1
+saturation = 25.0
+
+[node name="Pixler2" parent="Living" instance=ExtResource("2_0t3ip")]
+position = Vector2(837, 80)
+
+[node name="Pixler3" parent="Living" instance=ExtResource("2_0t3ip")]
+position = Vector2(216, 80)
+
+[node name="Fence" type="Sprite2D" parent="."]
+position = Vector2(139, 63)
+texture = ExtResource("4_d6q74")
+
+[node name="Fence2" type="Sprite2D" parent="."]
+position = Vector2(171, 63)
+texture = ExtResource("4_d6q74")
+
+[node name="GroundBody" type="StaticBody2D" parent="."]
+position = Vector2(0, 80)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GroundBody"]
+shape = SubResource("WorldBoundaryShape2D_x4kpd")
+
+[node name="TreeSpawner" type="Node2D" parent="."]
+script = ExtResource("7_6sj82")
+spawn_area = Rect2(200, 79, 500, 1)
+show_in_editor = false
+extend_horizontally_to_window = true
+spawn_rate = 10.0
+randomize = 0.4
+spawned_object = ExtResource("6_bcwlr")
+max_alive_objects = 5
+minimum_distance = 60
+
+[node name="AppleTree" parent="TreeSpawner" instance=ExtResource("6_bcwlr")]
+position = Vector2(326, 80)
+growth = 0.9

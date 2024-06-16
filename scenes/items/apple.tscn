@@ -1,0 +1,88 @@
+[gd_scene load_steps=8 format=3 uid="uid://bsfesk0clkgrx"]
+
+[ext_resource type="Script" path="res://scripts/items/apple.gd" id="1_eafmh"]
+[ext_resource type="Texture2D" uid="uid://cof3xb0gh765x" path="res://assets/nature/apple.png" id="1_x51q5"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_l3skq"]
+radius = 4.0
+
+[sub_resource type="Animation" id="Animation_vsdeu"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_d8pj0"]
+resource_name = "grow"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0.1, 0.1), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_ttfup"]
+resource_name = "idle"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_panox"]
+_data = {
+"RESET": SubResource("Animation_vsdeu"),
+"grow": SubResource("Animation_d8pj0"),
+"idle": SubResource("Animation_ttfup")
+}
+
+[node name="Apple" type="RigidBody2D" groups=["food"]]
+z_index = 20
+mass = 0.2
+inertia = 0.5
+script = ExtResource("1_eafmh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_l3skq")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("1_x51q5")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_panox")
+}
+autoplay = "idle"
+
+[node name="RipeTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[node name="DecayTimer" type="Timer" parent="."]
+wait_time = 20.0
+one_shot = true
+
+[connection signal="timeout" from="RipeTimer" to="." method="_on_ripe"]
+[connection signal="timeout" from="DecayTimer" to="." method="_on_decayed"]

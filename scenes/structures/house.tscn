@@ -1,0 +1,95 @@
+[gd_scene load_steps=9 format=3 uid="uid://utd3r1k2iml8"]
+
+[ext_resource type="Script" path="res://scripts/structures/house.gd" id="1_60tvs"]
+[ext_resource type="Texture2D" uid="uid://dmxsbv5ofwqnq" path="res://assets/structures/house_3.png" id="1_pnq4x"]
+[ext_resource type="Texture2D" uid="uid://d1a4nwm73yngp" path="res://assets/structures/door_anim.png" id="2_b2ycq"]
+
+[sub_resource type="Animation" id="Animation_a7h0i"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DoorSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_gea5l"]
+resource_name = "door_close"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DoorSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [2, 1, 0]
+}
+
+[sub_resource type="Animation" id="Animation_ao7a3"]
+resource_name = "door_closed"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DoorSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_s2bmb"]
+resource_name = "door_open"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DoorSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [0, 1, 2]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_raag5"]
+_data = {
+"RESET": SubResource("Animation_a7h0i"),
+"door_close": SubResource("Animation_gea5l"),
+"door_closed": SubResource("Animation_ao7a3"),
+"door_open": SubResource("Animation_s2bmb")
+}
+
+[node name="House" type="Node2D"]
+z_index = 5
+script = ExtResource("1_60tvs")
+
+[node name="HouseSprite" type="Sprite2D" parent="."]
+position = Vector2(0, -32)
+texture = ExtResource("1_pnq4x")
+
+[node name="DoorSprite" type="Sprite2D" parent="."]
+position = Vector2(0, -12)
+texture = ExtResource("2_b2ycq")
+hframes = 3
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+unique_name_in_owner = true
+libraries = {
+"": SubResource("AnimationLibrary_raag5")
+}
+autoplay = "door_closed"
