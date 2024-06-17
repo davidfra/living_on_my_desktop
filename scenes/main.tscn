@@ -25,6 +25,14 @@ default_color = Color(0.501961, 0.501961, 0.501961, 1)
 [node name="House" parent="Structures" instance=ExtResource("2_nriij")]
 position = Vector2(98, 79)
 
+[node name="Fence" type="Sprite2D" parent="Structures"]
+position = Vector2(139, 63)
+texture = ExtResource("4_d6q74")
+
+[node name="Fence2" type="Sprite2D" parent="Structures"]
+position = Vector2(171, 63)
+texture = ExtResource("4_d6q74")
+
 [node name="Living" type="Node" parent="."]
 
 [node name="Pixler" parent="Living" instance=ExtResource("2_0t3ip")]
@@ -37,14 +45,6 @@ position = Vector2(837, 80)
 
 [node name="Pixler3" parent="Living" instance=ExtResource("2_0t3ip")]
 position = Vector2(216, 80)
-
-[node name="Fence" type="Sprite2D" parent="."]
-position = Vector2(139, 63)
-texture = ExtResource("4_d6q74")
-
-[node name="Fence2" type="Sprite2D" parent="."]
-position = Vector2(171, 63)
-texture = ExtResource("4_d6q74")
 
 [node name="GroundBody" type="StaticBody2D" parent="."]
 position = Vector2(0, 80)
@@ -66,3 +66,8 @@ minimum_distance = 60
 [node name="AppleTree" parent="TreeSpawner" instance=ExtResource("6_bcwlr")]
 position = Vector2(326, 80)
 growth = 0.9
+
+[node name="UI" type="Node2D" parent="."]
+
+[node name="PopupMenu" type="PopupMenu" parent="UI"]
+unique_name_in_owner = true
