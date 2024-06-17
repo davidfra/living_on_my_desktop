@@ -41,6 +41,10 @@ folder_colors={
 "res://scripts/": "green"
 }
 
+[gui]
+
+theme/custom="res://scenes/ui/ingame_ui_theme.tres"
+
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0
